@@ -1,4 +1,4 @@
-const initialState = { content: 'Default notification', style: 'error', visible: false }
+const initialState = { content: 'Default notification', style: 'success', visible: false }
 
 const notificationReducer = (state = initialState, action) => {
   switch (action.type) {
@@ -11,12 +11,13 @@ const notificationReducer = (state = initialState, action) => {
   }
 }
 
-export const setNotification = (content, timeout) => {
+export const setNotification = (content, style, timeout) => {
   return async dispatch => {
     dispatch({
       type: 'SET_NOTIF',
       data: {
         content: content,
+        style: style,
         visible: true
       }
     })

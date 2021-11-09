@@ -1,4 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react'
+import { useDispatch } from 'react-redux'
+import { setNotification } from './reducers/notificationReducer'
+import { initializeBlogs } from './reducers/blogReducer'
 import Blogs from './components/Blogs'
 import Login from './components/Login'
 import BlogForm from './components/BlogForm'
@@ -8,24 +11,23 @@ import blogService from './services/blogs'
 import loginService from './services/login'
 
 const App = () => {
-  const [blogs, setBlogs] = useState([])
+  const dispatch = useDispatch()
   const [user, setUser] = useState(null)
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
-  const [notification, setNotification] = useState(null)
 
+  /*
   const sortSetBlogs = (blogs) => {
     const sortedList = blogs.sort((a, b) => b.likes - a.likes)
     setBlogs(sortedList)
   }
+  */
 
   const blogFormRef = useRef()
 
   useEffect(() => {
-    blogService.getAll().then(blogs =>
-      sortSetBlogs(blogs)
-    )
-  }, [])
+    dispatch(initializeBlogs())
+  }, [dispatch])
 
   useEffect(() => {
     const loggedInUserJSON = window.localStorage.getItem('loggedInUser')
@@ -50,13 +52,7 @@ const App = () => {
       setUsername('')
       setPassword('')
     } catch (error) {
-      setNotification({
-        message: 'learn to type!',
-        type: 'error'
-      })
-      setTimeout(() => {
-        setNotification(null)
-      }, 5000)
+      dispatch(setNotification('learn to type!', 'error', 5000))
     }
   }
 
@@ -65,83 +61,51 @@ const App = () => {
     window.localStorage.removeItem('loggedInUser')
   }
 
+  /*
   const addBlog = async (newBlog) => {
     try {
       blogFormRef.current.toggleVisibility()
       const response = await blogService.addBlog(newBlog)
       const newBlogList = blogs.concat(response)
       sortSetBlogs(newBlogList)
-      setNotification({
-        message: `a new blog ${response.title} by ${response.author} added`,
-        type: 'success'
-      })
-      setTimeout(() => {
-        setNotification(null)
-      }, 5000)
+      dispatch(setNotification(`a new blog ${response.title} by ${response.author} added`, 'success', 5000))
     } catch (error) {
-      setNotification({
-        message: 'error in saving new blog entry',
-        type: 'error'
-      })
-      setTimeout(() => {
-        setNotification(null)
-      }, 5000)
+      dispatch(setNotification('error in saving new blog entry', 'error', 5000))
     }
   }
+  */
 
+  /*
   const addLike = async (blog) => {
     try {
       const response = await blogService.likeBlog(blog)
       const blogList = blogs.map(b => b.id === response.id ? { ...response, user: blog.user } : b)
       sortSetBlogs(blogList)
-      setNotification({
-        message: `${response.title} by ${response.author} was liked`,
-        type: 'success'
-      })
-      setTimeout(() => {
-        setNotification(null)
-      }, 5000)
+      dispatch(setNotification(`${response.title} by ${response.author} was liked`, 'success', 5000))
     } catch (error) {
-      setNotification({
-        message: 'could not add a like',
-        type: 'error'
-      })
-      setTimeout(() => {
-        setNotification(null)
-      }, 5000)
+      dispatch(setNotification('could not add a like', 'error', 5000))
     }
   }
+  */
 
+  /*
   const removeBlog = async (blog) => {
     try {
       const blogId = blog.id
       await blogService.deleteBlog(blog)
       const blogList = blogs.filter(b => b.id !== blogId)
       sortSetBlogs(blogList)
-      setNotification({
-        message: `${blog.title} by ${blog.author} deleted succesfully`,
-        type: 'success'
-      })
-      setTimeout(() => {
-        setNotification(null)
-      }, 5000)
+      dispatch(setNotification(`${blog.title} by ${blog.author} deleted succesfully`, 'success', 5000))
     } catch (error) {
-      setNotification({
-        message: error.message,
-        type: 'error'
-      })
-      setTimeout(() => {
-        setNotification(null)
-      }, 5000)
+      dispatch(setNotification(error.message, 'error', 5000))
     }
   }
+  */
 
   if (user === null) {
     return (
       <div>
-        {
-          notification !== null && <Notification notification={notification} />
-        }
+        <Notification />
         <h2>log in to application</h2>
         <Login
           user={username}
@@ -156,17 +120,13 @@ const App = () => {
   if (user !== null) {
     return (
       <div>
-        {
-          notification !== null && <Notification notification={notification} />
-        }
+        <Notification />
         <h2>blogs</h2>
         logged in as {user.name} <button onClick={handleLogout}>logout</button> <br /><br />
         <Togglable buttonLabel='add new blog' ref={blogFormRef}>
-          <BlogForm
-            addBlog={addBlog}
-          />
+          <BlogForm />
         </Togglable><br /><br />
-        <Blogs blogs={blogs} addLike={addLike} removeBlog={removeBlog} userId={user.id} />
+        <Blogs userId={user.id} />
       </div>
     )
   }
