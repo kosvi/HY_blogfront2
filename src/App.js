@@ -1,18 +1,20 @@
 import React, { useState, useEffect, useRef } from 'react'
-import { useDispatch } from 'react-redux'
-import { setNotification } from './reducers/notificationReducer'
+import { useDispatch, useSelector } from 'react-redux'
+// import { setNotification } from './reducers/notificationReducer'
 import { initializeBlogs } from './reducers/blogReducer'
+import { storeUser, loginUser, logoutUser } from './reducers/userReducer'
 import Blogs from './components/Blogs'
 import Login from './components/Login'
 import BlogForm from './components/BlogForm'
 import Notification from './components/Notification'
 import Togglable from './components/Togglable'
 import blogService from './services/blogs'
-import loginService from './services/login'
+// import loginService from './services/login'
 
 const App = () => {
   const dispatch = useDispatch()
-  const [user, setUser] = useState(null)
+  //  const [user, setUser] = useState(null)
+  const user = useSelector(state => state.user)
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
 
@@ -34,12 +36,14 @@ const App = () => {
     if (loggedInUserJSON) {
       const user = JSON.parse(loggedInUserJSON)
       blogService.setToken(user.token)
-      setUser(user)
+      dispatch(storeUser(user))
     }
   }, [])
 
   const handleLogin = async (event) => {
     event.preventDefault()
+    dispatch(loginUser(username, password))
+    /*
     try {
       const user = await loginService.login({
         username, password
@@ -49,15 +53,18 @@ const App = () => {
       )
       blogService.setToken(user.token)
       setUser(user)
-      setUsername('')
-      setPassword('')
-    } catch (error) {
-      dispatch(setNotification('learn to type!', 'error', 5000))
-    }
+      */
+    setUsername('')
+    setPassword('')
+    /*
+  } catch (error) {
+    dispatch(setNotification('learn to type!', 'error', 5000))
+  }
+  */
   }
 
   const handleLogout = () => {
-    setUser(null)
+    dispatch(logoutUser())
     window.localStorage.removeItem('loggedInUser')
   }
 
