@@ -18,6 +18,7 @@ const userReducer = (state = null, action) => {
 }
 
 export const logoutUser = () => {
+  window.localStorage.removeItem('loggedInUser')
   return {
     type: 'LOGOUT_USER',
     data: null
