@@ -10,6 +10,7 @@ import Users from './components/Users'
 import BlogForm from './components/BlogForm'
 import Notification from './components/Notification'
 import Togglable from './components/Togglable'
+import SingleBlog from './components/SingleBlog'
 import blogService from './services/blogs'
 
 const App = () => {
@@ -21,6 +22,7 @@ const App = () => {
   const blogFormRef = useRef()
   // const history = useHistory()
   const match = useRouteMatch('/users/:id')
+  const blogRoute = useRouteMatch('/blogs/:id')
 
   useEffect(() => {
     dispatch(initializeBlogs())
@@ -70,6 +72,9 @@ const App = () => {
         <Switch>
           <Route path='/users'>
             <Users user={match ? match.params.id : null} />
+          </Route>
+          <Route path='/blogs/:id'>
+            <SingleBlog id={blogRoute ? blogRoute.params.id : null} />
           </Route>
           <Route path='/'>
             <Togglable buttonLabel='add new blog' ref={blogFormRef}>

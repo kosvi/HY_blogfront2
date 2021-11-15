@@ -1,0 +1,33 @@
+import React from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { likeBlog } from '../reducers/blogReducer'
+import { setNotification } from '../reducers/notificationReducer'
+
+const SingleBlog = ({ id }) => {
+
+  const dispatch = useDispatch()
+  const blog = useSelector(({ blogs }) => {
+    return blogs.find(b => b.id === id)
+  })
+
+  const like = () => {
+    dispatch(likeBlog(blog))
+    dispatch(setNotification(`${blog.title} by ${blog.author} was liked`, 'success', 5000))
+  }
+
+
+  if (!blog) {
+    return null
+  }
+
+  return (
+    <div>
+      <h1>{blog.title} by {blog.author}</h1>
+      <a href={blog.url}>{blog.url}</a><br />
+      {blog.likes} likes <button onClick={like}>like</button><br />
+      added by {blog.user.name}
+    </div>
+  )
+}
+
+export default SingleBlog

@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
+import { Link } from 'react-router-dom'
 
 const FullInfo = ({ blog, addLike, removeBlog, user }) => {
 
@@ -33,7 +34,7 @@ const Blog = ({ blog, addLike, removeBlog, user }) => {
 
   return (
     <div className='blog'>
-      {blog.title} {blog.author} <button onClick={toggleDisplay}>{displayAll ? 'hide' : 'view'}</button>
+      <Link to={`/blogs/${blog.id}`}>{blog.title} {blog.author}</Link> <button onClick={toggleDisplay}>{displayAll ? 'hide' : 'view'}</button>
       {displayAll && <FullInfo blog={blog} addLike={addLike} removeBlog={removeBlog} user={user} />}
     </div>
   )
