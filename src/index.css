@@ -15,3 +15,13 @@
   padding: 0.2em;
   margin-bottom: 0.2em;
 }
+
+.nav {
+  background-color: cadetblue;
+  padding: 0.4em;
+}
+
+.nav a {
+  color:lightgrey;
+  padding-right: 0.5em;
+}

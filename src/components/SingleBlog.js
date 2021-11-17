@@ -2,6 +2,7 @@ import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { likeBlog } from '../reducers/blogReducer'
 import { setNotification } from '../reducers/notificationReducer'
+import Comments from './Comments'
 
 const SingleBlog = ({ id }) => {
 
@@ -26,6 +27,7 @@ const SingleBlog = ({ id }) => {
       <a href={blog.url}>{blog.url}</a><br />
       {blog.likes} likes <button onClick={like}>like</button><br />
       added by {blog.user.name}
+      <Comments id={blog.id} />
     </div>
   )
 }

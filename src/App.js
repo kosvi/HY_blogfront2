@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { initializeBlogs } from './reducers/blogReducer'
-import { storeUser, loginUser, logoutUser } from './reducers/userReducer'
+import { storeUser, loginUser } from './reducers/userReducer'
 // import { Switch, Route, Link, useRouteMatch, useHistory } from 'react-router-dom'
 import { Switch, Route, useRouteMatch } from 'react-router-dom'
+import Menu from './components/Menu'
 import Blogs from './components/Blogs'
 import Login from './components/Login'
 import Users from './components/Users'
@@ -44,10 +45,6 @@ const App = () => {
     setPassword('')
   }
 
-  const handleLogout = () => {
-    dispatch(logoutUser())
-  }
-
   if (user === null) {
     return (
       <div>
@@ -66,9 +63,9 @@ const App = () => {
   if (user !== null) {
     return (
       <div>
+        <Menu />
         <Notification />
         <h2>blogs</h2>
-        logged in as {user.name} <button onClick={handleLogout}>logout</button> <br /><br />
         <Switch>
           <Route path='/users'>
             <Users user={match ? match.params.id : null} />

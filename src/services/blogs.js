@@ -17,6 +17,11 @@ const getSingle = async (id) => {
   return response.data
 }
 
+const getComments = async (id) => {
+  const response = await axios.get(`${baseUrl}/${id}/comments`)
+  return response.data
+}
+
 const addBlog = async (newBlog) => {
   const config = {
     headers: { Authorization: token }
@@ -47,4 +52,4 @@ const deleteBlog = async (blog) => {
   return response.data
 }
 
-export default { setToken, getAll, getSingle, addBlog, likeBlog, deleteBlog }
+export default { setToken, getAll, getSingle, getComments, addBlog, likeBlog, deleteBlog }
