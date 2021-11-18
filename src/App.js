@@ -47,7 +47,7 @@ const App = () => {
 
   if (user === null) {
     return (
-      <div>
+      <div className='container'>
         <Notification />
         <h2>log in to application</h2>
         <Login
@@ -62,7 +62,7 @@ const App = () => {
   }
   if (user !== null) {
     return (
-      <div>
+      <div className='container'>
         <Menu />
         <Notification />
         <h2>blogs</h2>
